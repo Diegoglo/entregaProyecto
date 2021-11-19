@@ -1,0 +1,39 @@
+<ion-menu side="end" menuId="first" contentId="Menu">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>User</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+        <ion-item routerLink="/dashboard/user_me" lines="full">
+          <ion-icon name="person-outline"></ion-icon>          
+          <ion-label>Mi Perfil</ion-label>
+        </ion-item>
+      
+        <ion-item routerLink="/dashboard/overview" lines="full">
+          <ion-icon name="analytics-outline"></ion-icon>
+          <ion-label>Dashboard</ion-label>
+        </ion-item>
+
+        <ion-item routerLink="/auxiliante" lines="full">
+          <ion-icon name="medkit-outline"></ion-icon>
+          <ion-label>Auxiliante</ion-label>
+        </ion-item>
+        
+        <ion-item routerDirection="none" lines="full">
+          <ion-icon name="bulb-outline"></ion-icon>
+          <ion-label>Ayuda</ion-label>
+        </ion-item>
+        
+        <ion-item routerDirection="none" lines="full">
+          <ion-icon name="arrow-back-circle-outline"></ion-icon>
+          <ion-label>Cerrar Sesión</ion-label>
+        </ion-item>
+        
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-router-outlet id="Menu"></ion-router-outlet>
+

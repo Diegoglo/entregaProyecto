@@ -1,0 +1,40 @@
+
+<ion-header style="background-color: black;">
+    <ion-toolbar>
+    <ion-icon style="padding-right:10% ;"slot="end"color="medium" name="settings-outline"></ion-icon>
+    <ion-title className="ion-text-center">Log In</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="checkoutForm" #loginForm="ngForm" (ngSubmit)="submit($event)">
+        <ion-grid>
+            <ion-row class="ion-padding">
+                <ion-col className="ion-text-center">
+                    <ion-item color="fondo">
+                        <ion-label position="floating">Usuario</ion-label>
+                        <ion-input formControlName="email" type="text"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-padding">
+                <ion-col className="ion-text-center">
+                    <ion-item color="fondo">
+                        <ion-label position="floating">Contraseña</ion-label>
+                        <ion-input formControlName="password" type="password"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-padding-vertical">
+                <ion-col className="ion-text-center">
+                    <ion-button  routerLink="/dashboard/overview" color="success" expand="block" type="submit" shape="round"><ion-text color="light"> Iniciar Sesión</ion-text></ion-button>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-padding-vertical">
+                <ion-col className="ion-text-center">
+                    <ion-button routerLink="/dashboard/register" color="warning" expand="block" shape="round"><ion-text color="light"> Registrarse</ion-text></ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+</ion-content>

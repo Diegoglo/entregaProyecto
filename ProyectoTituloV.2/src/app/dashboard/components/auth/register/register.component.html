@@ -1,0 +1,113 @@
+<ion-header>
+      <ion-toolbar color="fondo">
+          <ion-icon slot="start" name="arrow-back-outline" style="padding-left: 5%;"></ion-icon>
+          <ion-icon slot="end" color="medium" name="settings-outline" style="padding-right: 5%;"></ion-icon>
+          <ion-title className="ion-text-center">Registro</ion-title>
+      </ion-toolbar>
+</ion-header>
+<ion-content color="fondo">
+    <form [formGroup]="formulario" #registerForm="ngForm" (ngSubmit)="registrarse($event, registerForm)">
+        <ion-grid>
+            <ion-list>
+                <ion-row class="ion-padding">
+                    <ion-col className="ion-text-center">
+                        <ion-item color="fondo">
+                            <div *ngIf="formulario.get('nombre').errors && formulario.get('nombre').touched">
+                                <div *ngIf="formulario.get('nombre').hasError('required')">
+                                    <small class="requerido">(Nombre obligatorio)</small>
+                                </div>
+                            </div>
+                            <ion-label position="floating">Nombre</ion-label>
+                            <ion-input type="text" formControlName="nombre"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="ion-padding">
+                    <ion-col className="ion-text-center">
+                        <ion-item color="fondo">
+                            <div *ngIf="formulario.get('apellido').errors && formulario.get('apellido').touched">
+                                <div *ngIf="formulario.get('apellido').hasError('required')" class="alert alert-danger" role="alert">
+                                    <small class="requerido">(Apellido obligatorio)</small>
+                                </div>
+                            </div>
+                            <ion-label position="floating">Apellido</ion-label>
+                            <ion-input type="text" formControlName="apellido"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="ion-padding">
+                    <ion-col className="ion-text-center">
+                        <ion-item color="fondo">
+                            <div *ngIf="formulario.get('email').errors && formulario.get('email').touched">
+                                <div *ngIf="formulario.get('email').hasError('required')" class="alert alert-danger" role="alert">
+                                    <small class="requerido">(Email requerido)</small>
+                                </div>
+                            </div>
+                            <ion-label position="floating">Email</ion-label>
+                            <ion-input type="email" formControlName="email"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+
+                <!-- <ion-row class="ion-padding">
+                    <ion-col className="ion-text-center">
+                        <ion-item color="fondo">
+                            <ion-label>Fecha de nacimiento</ion-label>
+                            <ion-datetime  min="1920" max="2018" displayFormat="DD/MM/YYYY" formControlName="nacimiento"></ion-datetime>
+                        </ion-item>
+                    </ion-col>
+                </ion-row> -->
+
+                <ion-row class="ion-padding">
+                    <ion-col className="ion-text-center">
+                        <ion-item>
+                            <div *ngIf="formulario.get('password').errors && formulario.get('password').touched">
+                                <div *ngIf="formulario.get('password').hasError('required')">
+                                    <small class="requerido">(Contraseña obligatoria)</small>
+                                </div>
+                            </div>
+                            <ion-label position="floating">Contraseña</ion-label>
+                            <ion-input  type="password" formControlName="password"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row class="ion-padding">
+                  <ion-col className="ion-text-center">
+                      <ion-item>
+                          <div *ngIf="formulario.get('confirmarContraseña').errors && formulario.get('confirmarContraseña').touched">
+                              <div *ngIf="formulario.get('confirmarContraseña').hasError('required')">
+                                  <small class="requerido">(Requiere confirmar contraseña)</small>
+                              </div>
+                          </div>
+                          <ion-label position="floating">Confirmar Contraseña</ion-label>
+                          <ion-input type="password" formControlName="confirmarContraseña"></ion-input>
+                      </ion-item>
+                  </ion-col>
+                </ion-row>
+
+
+                <form [formGroup]="sexo" #sexForm="ngForm">
+                  <ion-row class="ion-padding">
+                    <ion-col className="ion-text-center">
+                        <p style="padding-left: 3%;">Seleccione su sexo</p>
+                        <ion-item color="fondo">
+                            <ion-label >Hombre</ion-label>
+                            <ion-checkbox color="primary" style="right: 20%;" formControlName="masculino" (click)="sexo.controls.femenino.setValue(false)"></ion-checkbox>
+                            <ion-label>Mujer</ion-label>
+                            <ion-checkbox color="primary" style="right: 25%;" formControlName="femenino" (click)="sexo.controls.masculino.setValue(false)"></ion-checkbox>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                </form>
+
+                <ion-row class="ion-padding-vertical">
+                    <ion-col className="ion-text-center">
+                        <ion-button typae="submit" [disabled]="formulario.invalid" routerLink="/dashboard/login" color="success" expand="block" shape="round"><ion-text color="light"> Finalizar</ion-text></ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-list>
+        </ion-grid>
+    </form>
+</ion-content>
+
