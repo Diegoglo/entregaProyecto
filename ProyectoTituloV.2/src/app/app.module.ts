@@ -7,8 +7,9 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
+import { JwtInterceptor} from './interceptors/jwt.interceptor.js';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,8 +24,8 @@ import { ChartsModule } from 'ng2-charts';
   ],
   providers: [
     { provide: RouteReuseStrategy,
-      useClass: IonicRouteStrategy
-    }
+      useClass: IonicRouteStrategy},
+    {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptor, multi:true}
   ],
   bootstrap: [AppComponent],
 })

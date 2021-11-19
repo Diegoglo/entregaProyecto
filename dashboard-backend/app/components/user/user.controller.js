@@ -50,6 +50,15 @@ class UserController {
     return user
   }
 
+  async findSignals(id){
+    const userWithSignals = await models.User.findByPk(id,{
+      include:{
+        model: Pulsimeter
+      }
+    })
+    return userWithSignals
+  }
+
   async update(id, changes) {
     const user = await models.User.findOne(id);
     const rta = await user.update(changes);

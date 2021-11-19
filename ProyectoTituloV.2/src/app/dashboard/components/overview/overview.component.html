@@ -1,46 +1,54 @@
-<div class="fluid-container" vh-100>
-  <app-avatar></app-avatar>
-  <ion-card>
-    <ion-card-header>
-      <ion-toolbar>
-        <ion-card-title>Señales</ion-card-title>
-      </ion-toolbar>
-    </ion-card-header> 
-    
-    <ion-card-content>
-      <div class="container">
-        <div class="row">
-          <div class="col-6 estilo">
-            <div>
-              <h6>Saturación de oxigeno</h6>
+
+<ion-content>
+  <div class="fluid-container" vh-100>
+    <app-avatar></app-avatar>
+    <ion-card>
+      <ion-card-header>
+        <ion-toolbar>
+          <ion-card-title>Señales</ion-card-title>
+        </ion-toolbar>
+      </ion-card-header> 
+      
+      <ion-card-content>
+        <div class="container">
+          <div class="row">
+            <div class="col-12 estilo">
+              <div>
+                <h6>Spo2</h6>
+              </div>
+              <canvas id="spo2" width="400" height="400">{{chartSpO2}}</canvas>
             </div>
-            <canvas id="spo2" width="400" height="400">{{chartSpO2}}</canvas>
-          </div>
-          <div class="col-6 estilo">
-            <div>
-              <h6>Ritmo cardiaco</h6><br>
+            <div class="col-12 estilo" style="margin-top: 5%;">
+              <div>
+                <h6>Pulso</h6>
+              </div>
+              <canvas id="pulso" width="400" height="400">{{chartPulso}}</canvas>
             </div>
-            <canvas id="pulso" width="400" height="400">{{chartPulso}}</canvas>
-          </div>
-          <div class="col-6 estilo">
-            <div>
-              <h6>Sudoración de la piel</h6><br>
+            <div class="col-12 estilo" style="margin-top: 5%;">
+              <div>
+                <h6>Gsr</h6>
+              </div>
+              <canvas id="gsr" width="400" height="400">{{chartGsr}}</canvas>
             </div>
-            <canvas id="gsr" width="400" height="400">{{chartGsr}}</canvas>
           </div>
         </div>
-      </div>
-    </ion-card-content>
+      </ion-card-content>
+    </ion-card>
 
-    <!-- Sudoración de la piel
-    <ion-card-content>
-      <div>
-        <canvas id="gsr" width="400" height="400">{{chartGsr}}</canvas>
-      </div>
-    </ion-card-content> -->
+    <ion-card>
+      <ion-header>
+        <ion-title>
+          <ion-card-title>Estrés</ion-card-title>
+        </ion-title>
+      </ion-header>
+      <ion-card-content>
+        <div class="container">
+            <h1>{{status}}</h1>
+        </div>
+      </ion-card-content>
+    </ion-card>
 
-  </ion-card>
-
-  <ion-button *ngIf="!transmitting" (click)="listenSignals()" color="secondary" expand="block" shape="round"><ion-text color="dark">Comenzar</ion-text></ion-button>
-  <ion-button *ngIf="transmitting" (click)="stopSignals()" color="danger" expand="block" shape="round"><ion-text color="dark">Detener</ion-text></ion-button>
- </div>
+    <ion-button *ngIf="!transmitting" (click)="listenSignals()" color="secondary" expand="block" shape="round"><ion-text color="dark">Comenzar</ion-text></ion-button>
+    <ion-button *ngIf="transmitting" (click)="stopSignals()" color="danger" expand="block" shape="round"><ion-text color="dark">Detener</ion-text></ion-button>
+  </div>
+</ion-content>

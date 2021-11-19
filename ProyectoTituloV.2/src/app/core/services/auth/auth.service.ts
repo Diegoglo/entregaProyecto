@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { Storage } from '@capacitor/storage';
 import { HttpHeaders } from '@angular/common/http';
 
-const ACCES_TOKEN_KEY = 'my-access-token';
+const ACCESS_TOKEN_KEY = 'my-access-token';
 const REFRESH_TOKEN_KEY = 'my-refresh-token';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   async loadToken() {
-    const token = await Storage.get({ key: ACCES_TOKEN_KEY });
+    const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
     if(token && token.value){
       this.currentAccesToken = token.value;
       this.isAuthenticated.next(true);
@@ -42,7 +42,7 @@ export class AuthService {
     return this.httpService.post('/auth/login', credetentials).pipe(
       switchMap((tokens: { accessToken; refreshToken }) => {
         this.currentAccesToken = tokens.accessToken;
-        const storeAccess = Storage.set({ key: ACCES_TOKEN_KEY, value: tokens.accessToken });
+        const storeAccess = Storage.set({ key: ACCESS_TOKEN_KEY, value: tokens.accessToken });
         const storeRefresh = Storage.set({ key: REFRESH_TOKEN_KEY, value: tokens.refreshToken });
         return from(Promise.all([storeAccess, storeRefresh]));
       }),
@@ -57,7 +57,7 @@ export class AuthService {
       switchMap(_ => {
         this.currentAccesToken = null;
 
-        const deleteAccess = Storage.remove({ key: ACCES_TOKEN_KEY });
+        const deleteAccess = Storage.remove({ key: ACCESS_TOKEN_KEY });
         const deleteRefresh = Storage.remove({ key: REFRESH_TOKEN_KEY });
         return from(Promise.all([deleteAccess, deleteRefresh]));
       }),
@@ -86,6 +86,11 @@ export class AuthService {
         }
       })
     );
+  }
+
+  storeAccessToken(accessToken){
+    this.currentAccesToken = accessToken;
+    return from(Storage.set({ key: ACCESS_TOKEN_KEY, value: accessToken}));
   }
 
 }

@@ -32,6 +32,19 @@ router.get('/:id',
   }
 );
 
+router.get('/:id/allSignals',
+  validatorHandler(getUserSchema, 'params'),
+  async (req,res,next) => {
+    const {id} = req.params;
+    try{
+      const user = await controller.findSignals(id);
+      res.json(user)
+    }catch(err){
+      next(err)
+    }
+  }
+);
+
 router.post('/register',
   validatorHandler(createUserSchema, 'body'),
   async (req, res, next) => {

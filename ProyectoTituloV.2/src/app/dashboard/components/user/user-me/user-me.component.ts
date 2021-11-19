@@ -10,6 +10,8 @@ import {  AbstractControl,
 import { StringDecoder } from 'string_decoder';
 import { UserProviderService } from '../../../../core/providers/user/user-provider.service';
 import { User2} from '../../../../core/model/user2.model';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-user-me',
@@ -24,7 +26,8 @@ export class UserMeComponent implements OnInit {
 
   constructor(
       private form: FormBuilder,
-      private userService: UserProviderService
+      private userService: UserProviderService,
+      private router: Router
       ) {
       this.sexo = this.form.group({
         masculino: new FormControl(false),
@@ -47,7 +50,9 @@ export class UserMeComponent implements OnInit {
       });
   }
 
-
+  goToMe(){
+    this.router.navigateByUrl('/dashboard/user_help', {replaceUrl: true});
+  }
 
   public genero(): number{
     if (this.sexo.get('femenino').value === true){

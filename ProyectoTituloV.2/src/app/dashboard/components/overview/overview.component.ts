@@ -1,16 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 // import { basename } from 'path';
 import io from 'socket.io-client';
+import fuzzylogic from 'fuzzylogic';
 
 import { Utils } from 'tslint';
+import { timeStamp } from 'console';
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.scss'],
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnInit{
 
 
   title = 'dashboard';
@@ -21,10 +23,106 @@ export class OverviewComponent implements OnInit {
   pulseData: any = [];
   gsrData: any = [];
   spo2Data: any = [];
+  pulseDataShow: any = [];
+  gsrDataShow: any = [];
+  spo2DataShow: any = [];
+
+  spo2Label:any = [];
+  gsrLabel:any = [];
+  pulseLabel:any=[];
+
+
+
   transmitting: boolean = false;
+
+  public LHR: any = []; //Low Heart Rate
+  public MHR: any = []; //Medium Heart Rate
+  public HHR: any = []; //High Heart Rate
+  public GSRL: any = []; //Galvanic Skin Response Level
+  public SPN: any = []; //SpO2 Normal
+  public status: string= 'No medido';
 
   constructor() {
     
+  }
+
+  
+  public checkStress() {
+
+    let sumLHR = 0;
+    let sumMHR = 0;
+    let sumHHR = 0;
+    let sumGSR = 0;
+    let promLHR = 0;
+    let promMHR = 0;
+    let promHHR = 0;
+    let promGSR = 0;
+    const pulseLength = this.pulseData.length;
+    const gsrLength = this.gsrData.length;
+
+    if(pulseLength!==0 && gsrLength!==0){
+    //Aquí la función revisa los valores fuzzificados y analiza los que puedan tener índices de estrés
+    //Reglas de GSR
+    for (let indexHR = 0, indexGsr = 0; indexHR < pulseLength || indexGsr < gsrLength; indexHR++, indexGsr++) {
+      if(indexHR < pulseLength){
+        sumLHR += this.LHR[indexHR];
+        sumMHR += this.MHR[indexHR];
+        sumHHR += this.HHR[indexHR];
+      }
+      if(indexGsr < gsrLength){
+        sumGSR += this.GSRL[indexGsr];
+      }
+
+
+    }
+
+    promLHR = sumLHR / pulseLength;
+    promMHR = sumMHR / pulseLength;
+    promHHR = sumHHR / pulseLength;
+    promGSR = sumGSR / gsrLength;
+
+    console.log(sumGSR);
+
+
+    if (promLHR > promMHR) {
+
+      if (promGSR < 0.333) {
+        this.status = "Nivel de estrés bajo";
+      }
+      else if (promGSR >= 0.333 && promGSR < 0.666) {
+        this.status= "Nivel de estrés medio bajo";
+      }
+      else if (promGSR >= 0.666) {
+        this.status = "Nivel de estrés bajo";
+      }
+    }
+
+    else if (promLHR < promMHR) {
+
+      if (promGSR < 0.333) {
+        this.status = "Nivel de estrés bajo";
+      }
+      else if (promGSR >= 0.333 && promGSR < 0.666) {
+        this.status = "Nivel de estrés medio bajo";
+      }
+      else if (promGSR >= 0.666) {
+        this.status = "Nivel de estrés medio";
+      }
+    }
+    else if (promHHR > promMHR) {
+
+      if (promGSR < 0.333) {
+        this.status = "Nivel de estrés alto";
+      }
+      else if (promGSR >= 0.333 && promGSR < 0.666) {
+        this.status = "Nivel de estrés alto";
+      }
+      else if (promGSR >= 0.666) {
+        this.status = "Nivel de estrés alto";
+      }
+    }
+
+  }
   }
 
   ngOnInit() {
@@ -41,6 +139,7 @@ export class OverviewComponent implements OnInit {
         }
       },
       data: {
+        labels:this.pulseLabel,
         datasets: [
           {
             label: 'pulse',
@@ -65,6 +164,7 @@ export class OverviewComponent implements OnInit {
         }
       },
       data: {
+        labels: this.gsrLabel,
         datasets: [
           {
             label: 'gsr',
@@ -89,6 +189,7 @@ export class OverviewComponent implements OnInit {
         }
       },
       data: {
+        labels:this.spo2Label,
         datasets: [
           {
             label: 'spo2',
@@ -103,28 +204,68 @@ export class OverviewComponent implements OnInit {
 
   }
 
+  public gsrMembership(gsrData) {
+    //Definición de la Función de Membresía Respuesta Galvánica
+    //console.log("gsrl");
+    for (let index = 0; index < gsrData.length; index++) {
+      const element = gsrData[index];
+      this.GSRL[index] = fuzzylogic.grade(element, 0, 500);
+
+    }
+
+  };
+
+  public hearRateMembership(pulseData) {
+    //Definición de la Función de Membresía Ritmo Cardíaco
+    for (let index = 0; index < pulseData.length; index++) {
+      const element = pulseData[index];
+      this.LHR[index] = fuzzylogic.triangle(element, 0, 20, 70);
+      this.MHR[index] = fuzzylogic.triangle(element, 45, 70, 100);
+      this.HHR[index] = fuzzylogic.triangle(element, 84, 135, 150);
+    }
+
+    console.log("Ritmo cardíaco BAJO: " + this.LHR);
+  };
+
+  public spo2Membership(spo2Data) {
+    //Definición de la Función de Membresía Saturación de Oxígeno
+
+    for (let index = 0; index < spo2Data.length; index++) {
+      const element = spo2Data[index];
+      this.SPN[index] = fuzzylogic.triangle(element, 95, 97, 100);
+    }
+    //console.log("Niveles de Oxigeno Normal, Baja y Alta: " + SPN[0] + " " + SPL[0] + " " + SPH[0]);
+  };
+
 
   updateHRSignal(pulsimeter) {
 
     this.pulseData.push(pulsimeter.pulso);
+    this.pulseDataShow.push(pulsimeter.pulso);
     this.spo2Data.push(pulsimeter.spo2);
+    this.spo2DataShow.push(pulsimeter.spo2);
+    this.spo2Label.push(pulsimeter.createdAt.slice(12,20));
+    this.pulseLabel.push(pulsimeter.createdAt.slice(12,20));
 
-    if(this.pulseData.length > 10){
-      this.pulseData.shift();
-      this.spo2Data.shift();
+    if(this.pulseDataShow.length > 10){
+      this.pulseDataShow.shift();
+      this.spo2DataShow.shift();
+      this.spo2Label.shift();
+      this.pulseLabel.shift();
     }
-    console.log(`dataSet: ${this.chartPulso.data.datasets[0].data.length}`);
-    console.log(`array: ${this.pulseData.length}`);
-
+   
     this.chartPulso.update();
     this.chartSpO2.update()
   }
 
   updateGsrSignal(gsr) {
     this.gsrData.push(gsr.value);
+    this.gsrDataShow.push(gsr.value);
+    this.gsrLabel.push(gsr.createdAt.slice(12,20));
 
-    if(this.gsrData.length > 10){
-      this.gsrData.shift();
+    if(this.gsrDataShow.length > 10){
+      this.gsrDataShow.shift();
+      this.gsrLabel.shift();
     }
     this.chartGsr.update();
   }
@@ -135,10 +276,15 @@ export class OverviewComponent implements OnInit {
 
     this.socket.on('server:data:pulse', (pulsimeter: any) => {
       this.updateHRSignal(pulsimeter);
+      this.hearRateMembership(this.pulseData);
+      this.spo2Membership(this.spo2Data);
+      this.checkStress();
     });
 
     this.socket.on('server:data:gsr', (gsr: any) => {
       this.updateGsrSignal(gsr);
+      this.gsrMembership(this.gsrData);
+      this.checkStress();
     });
     
   }
