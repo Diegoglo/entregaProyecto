@@ -63,6 +63,19 @@ router.post('/register',
   }
 );
 
+router.post('/mail',
+  async (req, res, next) => {
+    try{
+      const { subject, message, emailContacto } = req.body;
+      const mailInfo = await controller.sendEmail(subject, message, emailContacto);
+      res.status(201).json(mailInfo)
+    }
+    catch(err){
+      next(err)
+    }
+  }
+);
+
 router.patch('/:id/personal-data',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(getUserSchema, 'params'),

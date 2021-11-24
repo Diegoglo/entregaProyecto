@@ -2,11 +2,16 @@ const boom = require('@hapi/boom');
 const db = require("../../db/sequelize");
 const { models } = db.sequelize;
 const auth = require('../../utils/auth/auth');
+const { sendMail } = require('../../utils/mailer/nodeMailer');
 
 
 class UserController {
 
   constructor(){}
+
+  async sendEmail(){
+    return await sendMail();
+  }
 
   async create(user) {
     const hash = auth.hashPassword(user.password);
