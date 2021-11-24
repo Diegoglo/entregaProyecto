@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 //const { checkApiKey } = require('../../middlewares/authHandler')
 
 const UserController = require('./user.controller')
@@ -8,6 +9,7 @@ const  validatorHandler = require('../../middlewares/validatorHandler');
 const { createUserSchema, updateUserSchema, getUserSchema } = require('../../schemas/user.schema')
 
 router.get('/all',
+  passport.authenticate('jwt', {session: false}),
   //checkApiKey,
   async (req, res, next) => {
     try{
@@ -20,6 +22,7 @@ router.get('/all',
 });
 
 router.get('/:id',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getUserSchema, 'params'),
   async (req,res,next) => {
     const {id} = req.params;
@@ -33,6 +36,7 @@ router.get('/:id',
 );
 
 router.get('/:id/allSignals',
+passport.authenticate('jwt', {session: false}),
   validatorHandler(getUserSchema, 'params'),
   async (req,res,next) => {
     const {id} = req.params;
@@ -60,6 +64,7 @@ router.post('/register',
 );
 
 router.patch('/:id/personal-data',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getUserSchema, 'params'),
   validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {

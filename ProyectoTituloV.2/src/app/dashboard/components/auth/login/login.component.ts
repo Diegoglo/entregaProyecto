@@ -10,8 +10,10 @@ import {
   Validators
 } from '@angular/forms';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { Auth} from '../../../../core/model/auth.model';
 import { AuthService} from '../../../../core/services/auth/auth.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +22,7 @@ import { AuthService} from '../../../../core/services/auth/auth.service';
 })
 export class LoginComponent implements OnInit {
 
+  url = environment.baseUrl;
   public checkoutForm: FormGroup;
   users: Auth[];
 
@@ -27,6 +30,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private form: FormBuilder,
     private authService: AuthService,
+    private router: Router
   ){
     this.checkoutForm = this.form.group({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -43,8 +47,8 @@ export class LoginComponent implements OnInit {
     $event.preventDefault();
     if (this.checkoutForm.valid) {
       try {
-        const user = await this.authService.login(this.checkoutForm.value).toPromise();
-        console.log(user);
+        await this.authService.login(this.checkoutForm.value).toPromise();
+        this.router.navigateByUrl('dashboard/overview').then((data) => {console.log(data);});
       } catch (error) {
         console.log('Los datos ingresados son incorrectos');
       }

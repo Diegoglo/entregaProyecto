@@ -12,7 +12,7 @@ router.post('/login',
       const user = req.user;
       delete user.dataValues.createdAt
       const token = issueJWT(user);
-      res.json({user, token});
+      res.json({token});
     } catch (error) {
       next(error);
     }

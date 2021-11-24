@@ -26,4 +26,34 @@ export class AuthGuard implements CanLoad {
       })
     );
   }
+
+  canActivate() {
+    return this.authService.isAuthenticated.pipe(
+      filter(val => val !== null),
+      take(1),
+      map(isAuthenticated => {
+        if(isAuthenticated) {
+          return true;
+        } else {
+          this.router.navigateByUrl('dashboard/login');
+          return false;
+        }
+      })
+    );
+  }
+
+  canActivateChild() {
+    return this.authService.isAuthenticated.pipe(
+      filter(val => val !== null),
+      take(1),
+      map(isAuthenticated => {
+        if(isAuthenticated) {
+          return true;
+        } else {
+          this.router.navigateByUrl('dashboard/login');
+          return false;
+        }
+      })
+    );
+  }
 }

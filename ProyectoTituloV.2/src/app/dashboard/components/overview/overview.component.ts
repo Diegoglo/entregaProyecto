@@ -43,10 +43,10 @@ export class OverviewComponent implements OnInit{
   public status: string= 'No medido';
 
   constructor() {
-    
+
   }
 
-  
+
   public checkStress() {
 
     let sumLHR = 0;
@@ -60,7 +60,7 @@ export class OverviewComponent implements OnInit{
     const pulseLength = this.pulseData.length;
     const gsrLength = this.gsrData.length;
 
-    if(pulseLength!==0 && gsrLength!==0){
+    //if(pulseLength!==0 && gsrLength!==0){
     //Aquí la función revisa los valores fuzzificados y analiza los que puedan tener índices de estrés
     //Reglas de GSR
     for (let indexHR = 0, indexGsr = 0; indexHR < pulseLength || indexGsr < gsrLength; indexHR++, indexGsr++) {
@@ -76,10 +76,14 @@ export class OverviewComponent implements OnInit{
 
     }
 
-    promLHR = sumLHR / pulseLength;
-    promMHR = sumMHR / pulseLength;
-    promHHR = sumHHR / pulseLength;
-    promGSR = sumGSR / gsrLength;
+    if(pulseLength !== 0) {
+      promLHR = sumLHR / pulseLength;
+      promMHR = sumMHR / pulseLength;
+      promHHR = sumHHR / pulseLength;
+    }
+    if(gsrLength !== 0) {
+      promGSR = sumGSR / gsrLength;
+    }
 
     console.log(sumGSR);
 
@@ -122,7 +126,6 @@ export class OverviewComponent implements OnInit{
       }
     }
 
-  }
   }
 
   ngOnInit() {
@@ -176,7 +179,7 @@ export class OverviewComponent implements OnInit{
         ]
       }
     });
-    
+
     this.chartSpO2 = new Chart('spo2', {
       type: 'line',
       options: {
@@ -253,7 +256,7 @@ export class OverviewComponent implements OnInit{
       this.spo2Label.shift();
       this.pulseLabel.shift();
     }
-   
+
     this.chartPulso.update();
     this.chartSpO2.update()
   }
@@ -286,7 +289,7 @@ export class OverviewComponent implements OnInit{
       this.gsrMembership(this.gsrData);
       this.checkStress();
     });
-    
+
   }
 
   stopSignals() {
