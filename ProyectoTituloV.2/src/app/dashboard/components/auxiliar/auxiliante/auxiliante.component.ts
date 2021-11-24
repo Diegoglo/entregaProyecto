@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Router } from '@angular/router';
+
+
 @Component({
   selector: 'app-auxiliante',
   templateUrl: './auxiliante.component.html',
@@ -7,12 +10,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuxilianteComponent implements OnInit {
 
-  constructor() { 
+  constructor(private router: Router
+    ) { 
     interface IInvoice {
       invoiceDate: Date;
       invoiceNumber: string;
       totalAmount: number;
   }
+  }
+
+  goToRegisterAux(){
+    this.router.navigateByUrl('dashboard/registerAuxiliar');
   }
 
   ngOnInit() {}

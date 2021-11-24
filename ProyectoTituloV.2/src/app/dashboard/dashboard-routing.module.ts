@@ -54,8 +54,8 @@ const routes: Routes = [
     ]
   },
   {
-    path:'',
-    component:DashboardPage
+    path:'register',
+    component:RegisterComponent
   }
 ];
 

@@ -41,7 +41,8 @@ export class JwtInterceptor implements HttpInterceptor{
 
   private isInBlockedList(url: string): boolean {
       if (url === `${environment.baseUrl}/auth/login` ||
-          url === `${environment.baseUrl}/auth/logout`){
+          url === `${environment.baseUrl}/auth/logout`|| 
+          url === `${environment.baseUrl}/users/register`){
           return true;
       }else{
           return false;

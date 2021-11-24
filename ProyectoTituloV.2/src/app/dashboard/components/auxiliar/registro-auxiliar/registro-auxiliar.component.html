@@ -1,3 +1,74 @@
-<p>
-  registro-auxiliar works!
-</p>
+<ion-header>
+  <ion-toolbar color="fondo">
+      <ion-icon slot="start" name="arrow-back-outline" style="padding-left: 5%;"></ion-icon>
+      <ion-icon slot="end" color="medium" name="settings-outline" style="padding-right: 5%;"></ion-icon>
+      <ion-title className="ion-text-center">Registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content color="fondo">
+<form [formGroup]="formAux" #registerForm="ngForm" (ngSubmit)="registrarse($event, registerForm)">
+    <ion-grid>
+        <ion-list>
+            <ion-row class="ion-padding">
+                <ion-col className="ion-text-center">
+                    <ion-item color="fondo">
+                        <div *ngIf="formAux.get('nombre').errors && formAux.get('nombre').touched">
+                            <div *ngIf="formAux.get('nombre').hasError('required')">
+                                <small class="requerido">(Nombre obligatorio)</small>
+                            </div>
+                        </div>
+                        <ion-label position="floating">Nombre</ion-label>
+                        <ion-input type="text" formControlName="nombre"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-padding">
+                <ion-col className="ion-text-center">
+                    <ion-item color="fondo">
+                        <div *ngIf="formAux.get('apellido').errors && formAux.get('apellido').touched">
+                            <div *ngIf="formAux.get('apellido').hasError('required')" class="alert alert-danger" role="alert">
+                                <small class="requerido">(Apellido obligatorio)</small>
+                            </div>
+                        </div>
+                        <ion-label position="floating">Apellido</ion-label>
+                        <ion-input type="text" formControlName="apellido"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-padding">
+                <ion-col className="ion-text-center">
+                    <ion-item color="fondo">
+                        <div *ngIf="formAux.get('email').errors && formAux.get('email').touched">
+                            <div *ngIf="formAux.get('email').hasError('required')" class="alert alert-danger" role="alert">
+                                <small class="requerido">(Email requerido)</small>
+                            </div>
+                        </div>
+                        <ion-label position="floating">Email</ion-label>
+                        <ion-input type="email" formControlName="email"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="ion-padding">
+                <ion-col className="ion-text-center">
+                    <ion-item>
+                        <div *ngIf="formAux.get('telefono').errors && formAux.get('telefono').touched">
+                            <div *ngIf="formAux.get('telefono').hasError('required')">
+                                <small class="requerido">(Teléfono obligatorio)</small>
+                            </div>
+                        </div>
+                        <ion-label position="floating">Teléfono</ion-label>
+                        <ion-input  type="tel" formControlName="telefono"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="ion-padding-vertical">
+                <ion-col className="ion-text-center">
+                    <ion-button type="submit" [disabled]="formAux.invalid" routerLink="/dashboard/auxiliante" color="success" expand="block" shape="round"><ion-text color="light"> Finalizar</ion-text></ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-list>
+    </ion-grid>
+</form>
+</ion-content>
