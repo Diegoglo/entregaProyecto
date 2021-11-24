@@ -58,7 +58,8 @@ class UserController {
   async findSignals(id){
     const userWithSignals = await models.User.findByPk(id,{
       include:{
-        model: 'pulsimeter'
+        model: models.Pulsimeter ,
+
       }
     })
     return userWithSignals

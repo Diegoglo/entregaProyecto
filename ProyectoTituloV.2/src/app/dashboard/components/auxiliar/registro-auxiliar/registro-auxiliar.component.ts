@@ -7,7 +7,7 @@ import {  AbstractControl,
           ValidationErrors,
           ValidatorFn,
           Validators } from '@angular/forms';
-import { AuxService} from '../../../../core/providers/aux/aux.service'
+//import { AuxService} from '../../../../core/providers/aux/aux.service'
 
 @Component({
   selector: 'app-registro-auxiliar',
@@ -22,14 +22,14 @@ export class RegistroAuxiliarComponent implements OnInit {
 
   constructor(
       private form: FormBuilder,
-      private auxService: AuxService,
-    ) { 
+//      private auxService: AuxService,
+    ) {
     this.formAux = this.form.group({
       nombre: new FormControl('', [Validators.required]),
       apellido: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       telefono: new FormControl('',[Validators.required]),
-    })
+    });
   }
 
   ngOnInit() {}
@@ -37,7 +37,7 @@ export class RegistroAuxiliarComponent implements OnInit {
   public registrarse(event: Event, formulario: FormGroupDirective ){
     event.preventDefault();
     if (this.formAux.valid) {
-      console.log(this.formAux.value)
+      console.log(this.formAux.value);
       this.submitReport();
     }
 
@@ -45,6 +45,6 @@ export class RegistroAuxiliarComponent implements OnInit {
   }
 
   public async submitReport(): Promise<void> {
-    await this.auxService.addAuxiliante(this.formAux.value).toPromise();
+//    await this.auxService.addAuxiliante(this.formAux.value).toPromise();
   }
 }

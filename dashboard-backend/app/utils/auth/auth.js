@@ -26,7 +26,6 @@ const comparePassword = async  (passwordEntered, passwordUserFromDB) => {
 
 const issueJWT = (user) => {
     const id = user.id;
-
     const currentDate = new Date()
     const expirationDate = new Date()
     expirationDate.setDate(currentDate.getDate() + 30)
