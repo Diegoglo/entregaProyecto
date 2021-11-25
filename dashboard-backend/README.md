@@ -15,5 +15,3 @@
     * {force: true}: Cada vez que se ejecute el código, las tablas y todos los datos seran borrados y vueltas a crear. Fuerza la creación desde cero de las tablas.
     * {alter: true}: Cada vez que se ejecute el código, sequelize comparará entre los modelos y las tablas y aplicará los cambios. No borra ni datos ni tablas.
 
-Eso por ahora, implementaré *migraciones* entre hoy y mañana. Generan un control de "versiones" de ejecuciones de la BD.
-Y el lunes implemento Tokens.
