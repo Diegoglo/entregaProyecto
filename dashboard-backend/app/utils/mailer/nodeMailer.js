@@ -1,4 +1,6 @@
 const nodemailer = require("nodemailer");
+const user = process.env.EMAIL_MAILER;
+const pass = process.env.PASSWORD_MAILER;
 
 // async..await is not allowed in global scope, must use a wrapper
 async function sendMail(subject, message, emailContacto) {
@@ -9,8 +11,8 @@ async function sendMail(subject, message, emailContacto) {
     secure: true, // true for 465, false for other ports
     port: 465,
     auth: {
-      user: 'dashboardstresspucv@gmail.com',
-      pass: 'gkgbfnigrvxzvuot'
+      user: user,
+      pass: pass
     }
   });
 
@@ -20,7 +22,7 @@ async function sendMail(subject, message, emailContacto) {
     to:  emailContacto, // list of receivers
     subject: subject, // Subject line
     text: message, // plain text body
-    html: "<b>Hola CHANCHO</b>", // html body
+    html: `<b>${message}</b>`, // html body
   });
 
   console.log("Message sent: %s", info.messageId);

@@ -2,16 +2,11 @@ const boom = require('@hapi/boom');
 const db = require("../../db/sequelize");
 const { models } = db.sequelize;
 const auth = require('../../utils/auth/auth');
-const { sendMail } = require('../../utils/mailer/nodeMailer');
 
 
 class UserController {
 
   constructor(){}
-
-  async sendEmail(){
-    return await sendMail();
-  }
 
   async create(user) {
     const hash = auth.hashPassword(user.password);
@@ -57,10 +52,15 @@ class UserController {
 
   async findSignals(id){
     const userWithSignals = await models.User.findByPk(id,{
-      include:{
+      include:[{
         model: models.Pulsimeter ,
-
+        as: 'pulsimeter'
+      },
+      {
+        model: models.Gsr ,
+        as: 'gsr'
       }
+    ]
     })
     return userWithSignals
   }
