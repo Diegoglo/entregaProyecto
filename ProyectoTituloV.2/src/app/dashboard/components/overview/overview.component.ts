@@ -45,7 +45,7 @@ export class OverviewComponent implements OnInit{
   public HHR: any = []; //High Heart Rate
   public GSRL: any = []; //Galvanic Skin Response Level
   public SPN: any = []; //SpO2 Normal
-  public status: string= 'No medido';
+  public status: string = 'No medido';
 
   constructor(private auxilianteService: AuxilianteService, private stressProviderService: StressProviderService) {
 
@@ -64,6 +64,9 @@ export class OverviewComponent implements OnInit{
     let promGSR = 0;
     const pulseLength = this.pulseData.length;
     const gsrLength = this.gsrData.length;
+
+    console.log(`GSR : ${gsrLength}`);
+    console.log(`PULSO : ${pulseLength}`);
 
     //if(pulseLength!==0 && gsrLength!==0){
     //Aquí la función revisa los valores fuzzificados y analiza los que puedan tener índices de estrés
@@ -90,8 +93,6 @@ export class OverviewComponent implements OnInit{
       promGSR = sumGSR / gsrLength;
     }
 
-    console.log(sumGSR);
-
 
     if (promLHR > promMHR) {
 
@@ -102,7 +103,7 @@ export class OverviewComponent implements OnInit{
         this.status= "Nivel de estrés medio bajo";
       }
       else if (promGSR >= 0.666) {
-        this.status = "Nivel de estrés bajo";
+        this.status = "Nivel de estrés medio";
       }
     }
 
@@ -112,10 +113,10 @@ export class OverviewComponent implements OnInit{
         this.status = "Nivel de estrés bajo";
       }
       else if (promGSR >= 0.333 && promGSR < 0.666) {
-        this.status = "Nivel de estrés medio bajo";
+        this.status = "Nivel de estrés medio";
       }
       else if (promGSR >= 0.666) {
-        this.status = "Nivel de estrés medio";
+        this.status = "Nivel de estrés medio alto";
       }
     }
     else if (promHHR > promMHR) {
@@ -123,9 +124,9 @@ export class OverviewComponent implements OnInit{
       if (promGSR < 0.333) {
         if(this.isValidDate(this.emailDate)){
           this.emailDate = new Date();
-           this.sendMailtoContacts('Nivel de estrés alto');
+           this.sendMailtoContacts('Nivel de estrés medio alto');
         }
-        this.status = "Nivel de estrés alto";
+        this.status = "Nivel de estrés medio alto";
       }
       else if (promGSR >= 0.333 && promGSR < 0.666) {
         if(this.isValidDate(this.emailDate)){
@@ -137,17 +138,26 @@ export class OverviewComponent implements OnInit{
       else if (promGSR >= 0.666) {
         if(this.isValidDate(this.emailDate)){
           this.emailDate = new Date();
-           this.sendMailtoContacts('Nivel de estrés alto');
+           this.sendMailtoContacts('Nivel de estrés muy alto');
         }
-        this.status = "Nivel de estrés alto";
+        this.status = "Nivel de estrés muy alto";
       }
+    }
+
+    if(pulseLength > 40 || gsrLength > 40){
+      this.pulseData = [];
+      this.gsrData= [];
+      this.GSRL = [];
+      this.LHR = [];
+      this.MHR = [];
+      this.HHR = [];
+      this.SPN = [];
     }
 
   }
 
   isValidDate(lastEmailSendedDate){
     if(!lastEmailSendedDate) {
-      console.log(lastEmailSendedDate);
       return true;
     }
     const currentDate = new Date();
@@ -159,18 +169,23 @@ export class OverviewComponent implements OnInit{
     }
   }
 
-    async sendMailtoContacts(nivelEstres: string){
-    const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
-    const decodeToken: any = jwt_decode(token.value);
-    const auxiliantes: any[] = await this.auxilianteService.getAuxiliante(decodeToken.sub).toPromise();
-    console.log(auxiliantes);
-    const emailAuxiliantes: any[]= auxiliantes.map(auxiliante => auxiliante.email);
-    const emailBody: any = {
-      subject: 'ALERTA DE ESTRES DASHBOARD PUCV',
-      message: nivelEstres,
-      emailContacto: emailAuxiliantes
-    };
-    this.stressProviderService.sendMail(emailBody);
+  async sendMailtoContacts(nivelEstres: string){
+    try{
+      const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
+      const decodeToken: any = jwt_decode(token.value);
+      const auxiliantes: any[] = await this.auxilianteService.getAuxiliante(decodeToken.sub).toPromise();
+      if(auxiliantes.length !== 0) {
+        const emailAuxiliantes: any[]= auxiliantes.map(auxiliante => auxiliante.email);
+        const emailBody: any = {
+          subject: 'ALERTA DE ESTRES DASHBOARD PUCV',
+          message: nivelEstres,
+          emailContacto: emailAuxiliantes
+        };
+      await this.stressProviderService.sendMail(emailBody).toPromise();
+      }
+    }catch(err){
+      console.log(err);
+    }
   }
 
   ngOnInit() {
@@ -191,7 +206,7 @@ export class OverviewComponent implements OnInit{
         datasets: [
           {
             label: 'pulse',
-            data: this.pulseData,
+            data: this.pulseDataShow,
             backgroundColor: 'rgba(34, 209, 240 )',
             borderColor: 'rgba(34, 209, 240 )',
             fill: false,
@@ -216,7 +231,7 @@ export class OverviewComponent implements OnInit{
         datasets: [
           {
             label: 'gsr',
-            data: this.gsrData,
+            data: this.gsrDataShow,
             backgroundColor: 'rgba(233, 239, 37)',
             borderColor: 'rgba(233, 239, 37)',
             fill: false,
@@ -241,7 +256,7 @@ export class OverviewComponent implements OnInit{
         datasets: [
           {
             label: 'spo2',
-            data: this.spo2Data,
+            data: this.spo2DataShow,
             backgroundColor: 'rgba(240, 115, 34)',
             borderColor: 'rgba(240, 115, 34)',
             fill: false,
@@ -272,7 +287,7 @@ export class OverviewComponent implements OnInit{
       this.HHR[index] = fuzzylogic.triangle(element, 84, 135, 150);
     }
 
-    console.log("Ritmo cardíaco BAJO: " + this.LHR);
+    //console.log("Ritmo cardíaco BAJO: " + this.LHR);
   };
 
   public spo2Membership(spo2Data) {
@@ -303,7 +318,7 @@ export class OverviewComponent implements OnInit{
     }
 
     this.chartPulso.update();
-    this.chartSpO2.update()
+    this.chartSpO2.update();
   }
 
   updateGsrSignal(gsr) {

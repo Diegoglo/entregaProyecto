@@ -20,7 +20,7 @@ export class AuxilianteService {
   getAuxilianteByEmail(id: string, email:string): Observable<any>{
     return this.http.get<Auxx>(`/auxiliante/${id}/byEmail?email=${email}`);
   }
-  
+
   getAuxilianteByTelefono(id: string, telefono:string): Observable<any>{
     return this.http.get<Auxx>(`/auxiliante/${id}/byTelefono=?telefono=${telefono}`);
   }

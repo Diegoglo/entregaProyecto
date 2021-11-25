@@ -70,7 +70,6 @@
 
     <ion-button *ngIf="!transmitting" (click)="listenSignals()" color="secondary" expand="block" shape="round"><ion-text color="dark">Comenzar</ion-text></ion-button>
     <ion-button *ngIf="transmitting" (click)="stopSignals()" color="danger" expand="block" shape="round"><ion-text color="dark">Detener</ion-text></ion-button>
-    <ion-button (click)="sendMailtoContacts('perrito')" color="danger" expand="block" shape="round"><ion-text color="dark">enviar email</ion-text></ion-button>
-    
+
   </div>
 </ion-content>
