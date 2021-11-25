@@ -67,7 +67,9 @@ class AuxilianteController {
   }
 
   async delete(id) {
-    const auxiliante = await models.Auxiliante.findOne(id);
+    console.log(id);
+    // const auxiliante = await models.Auxiliante.findOne(id);
+    const auxiliante = await models.Auxiliante.findByPk(id);
     await auxiliante.destroy();
     return {id}
   }

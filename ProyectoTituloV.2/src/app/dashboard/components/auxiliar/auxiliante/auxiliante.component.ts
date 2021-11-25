@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit,Output, EventEmitter } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { AuxilianteService } from '../../../../core/providers/auxiliante/auxiliante.service'
@@ -17,11 +17,12 @@ const ACCESS_TOKEN_KEY = 'my-access-token';
 export class AuxilianteComponent implements OnInit, OnChanges {
 
   public auxiliantes;
-  
+  posicion:string;
 
   constructor(private router: Router,
     private auxService: AuxilianteService
     ) { 
+
     interface IInvoice {
       invoiceDate: Date;
       invoiceNumber: string;
@@ -45,7 +46,25 @@ export class AuxilianteComponent implements OnInit, OnChanges {
   ngOnInit(){
     this.mostrar();
   }
+
+  goToAction(){
+    this.router.navigateByUrl('dashboard/aux_accion');
+  }
+
+  public async eliminarAuxiliante(index:number){
+    const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
+    const decodeToken:any=jwt_decode(token.value);
+    this.posicion= String(index)
+    const auxilianteDelete= this.auxiliantes[this.posicion]
+    await this.auxService.deleteAuxiliante(auxilianteDelete.id).toPromise();
+    await this.auxService.getAuxiliante(decodeToken.sub).toPromise();
+
+  }
+
+  
+
   async ngOnChanges() {
+    
     this.mostrar();
   }
   
