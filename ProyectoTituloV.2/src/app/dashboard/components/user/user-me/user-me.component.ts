@@ -50,8 +50,8 @@ export class UserMeComponent implements OnInit {
       });
   }
 
-  goToMe(){
-    this.router.navigateByUrl('/dashboard/user_help', {replaceUrl: true});
+  goToOverview(){
+    this.router.navigateByUrl('/dashboard/overview', {replaceUrl: true});
   }
 
   public genero(): number{

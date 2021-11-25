@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
     if (this.checkoutForm.valid) {
       try {
         await this.authService.login(this.checkoutForm.value).toPromise();
-        this.router.navigateByUrl('dashboard/overview').then((data) => {console.log(data);});
+        this.router.navigateByUrl('dashboard/overview');
       } catch (error) {
         console.log('Los datos ingresados son incorrectos');
       }

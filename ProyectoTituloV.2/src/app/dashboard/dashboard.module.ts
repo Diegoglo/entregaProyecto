@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { DashboardPage } from './dashboard';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SwiperModule} from 'swiper/angular';
 
 
 
@@ -24,7 +25,8 @@ import { UserHelpComponent} from './components/user/user-help/user-help.componen
     FormsModule,
     IonicModule,
     DashboardPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SwiperModule
   ],
   declarations: [
     DashboardPage,
