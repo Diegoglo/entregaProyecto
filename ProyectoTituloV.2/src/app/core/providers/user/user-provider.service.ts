@@ -20,7 +20,6 @@ export class UserProviderService {
   }
 
   addUser(user: User2): Observable<User2>{
-    console.log(user);
     return this.http.post<User2>('/users/register', user);
   }
 

@@ -12,7 +12,7 @@ import { AuxilianteService} from '../../../../core/providers/auxiliante/auxilian
 import { UserProviderService} from '../../../../core/providers/user/user-provider.service'
 import { Storage } from '@capacitor/storage';
 
-import jwt_decode from 'jwt-decode'
+import jwt_decode from 'jwt-decode';
 const ACCESS_TOKEN_KEY = 'my-access-token';
 
 
@@ -46,7 +46,7 @@ export class RegistroAuxiliarComponent implements OnInit {
     event.preventDefault();
     if (this.formAux.valid) {
       const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
-      const decodeToken:any=jwt_decode(token.value);
+      const decodeToken: any=jwt_decode(token.value);
       const auxiliante={
         user_id: decodeToken.sub,
         nombre:this.formAux.get('nombre').value,
