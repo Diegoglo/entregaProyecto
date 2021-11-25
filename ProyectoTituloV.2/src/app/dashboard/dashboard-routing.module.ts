@@ -10,6 +10,7 @@ import { AvatarComponent} from './components/avatar/avatar.component';
 import { UserMeComponent} from './components/user/user-me/user-me.component';
 import { UserHelpComponent} from './components/user/user-help/user-help.component';
 import { AuthGuard } from '../guards/auth.guard';
+import { AccionAuxilianteComponent} from './components/auxiliar/accion-auxiliante/accion-auxiliante.component'
 
 const routes: Routes = [
   {
@@ -50,13 +51,18 @@ const routes: Routes = [
       {
         path:'user_help',
         component: UserHelpComponent
-      }
+      },
+      {
+        path:'aux_accion',
+        component:AccionAuxilianteComponent
+      },
     ]
   },
   {
     path:'register',
     component:RegisterComponent
-  }
+  },
+  
 ];
 
 

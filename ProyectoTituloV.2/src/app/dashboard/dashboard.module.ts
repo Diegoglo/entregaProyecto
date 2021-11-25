@@ -16,7 +16,8 @@ import { RegistroAuxiliarComponent} from './components/auxiliar/registro-auxilia
 import { AuxilianteComponent} from './components/auxiliar/auxiliante/auxiliante.component';
 import { AvatarComponent} from './components/avatar/avatar.component';
 import { UserMeComponent} from './components/user/user-me/user-me.component'
-import { UserHelpComponent} from './components/user/user-help/user-help.component'
+import { UserHelpComponent} from './components/user/user-help/user-help.component';
+import { AccionAuxilianteComponent} from './components/auxiliar/accion-auxiliante/accion-auxiliante.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { UserHelpComponent} from './components/user/user-help/user-help.componen
     AuxilianteComponent,
     AvatarComponent,
     UserMeComponent,
-    UserHelpComponent
+    UserHelpComponent,
+    AccionAuxilianteComponent
   ]
 })
 export class DashboardPageModule {}
