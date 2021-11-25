@@ -1,7 +1,6 @@
 <ion-header>
   <ion-toolbar color="fondo">
-      <ion-icon slot="start" name="arrow-back-outline" style="padding-left: 5%;"></ion-icon>
-      <ion-icon slot="end" color="medium" name="settings-outline" style="padding-right: 5%;"></ion-icon>
+      <ion-button slot="start" routerLink="/dashboard/auxiliante"><ion-icon name="arrow-back-outline" style="padding-left: 5%;"></ion-icon></ion-button>
       <ion-title className="ion-text-center">Registro</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -26,7 +25,7 @@
                 <ion-col className="ion-text-center">
                     <ion-item color="fondo">
                         <div *ngIf="formAux.get('apellido').errors && formAux.get('apellido').touched">
-                            <div *ngIf="formAux.get('apellido').hasError('required')" class="alert alert-danger" role="alert">
+                            <div *ngIf="formAux.get('apellido').hasError('required')">
                                 <small class="requerido">(Apellido obligatorio)</small>
                             </div>
                         </div>
@@ -39,7 +38,7 @@
                 <ion-col className="ion-text-center">
                     <ion-item color="fondo">
                         <div *ngIf="formAux.get('email').errors && formAux.get('email').touched">
-                            <div *ngIf="formAux.get('email').hasError('required')" class="alert alert-danger" role="alert">
+                            <div *ngIf="formAux.get('email').hasError('required')">
                                 <small class="requerido">(Email requerido)</small>
                             </div>
                         </div>
@@ -65,7 +64,8 @@
 
             <ion-row class="ion-padding-vertical">
                 <ion-col className="ion-text-center">
-                    <ion-button type="submit" [disabled]="formAux.invalid" routerLink="/dashboard/auxiliante" color="success" expand="block" shape="round"><ion-text color="light"> Finalizar</ion-text></ion-button>
+                    <span *ngIf="registroAuxIncorrecto" style="color: red; padding-left: 10%;">No fue posible registrar auxiliante</span>
+                    <ion-button type="submit" [disabled]="formAux.invalid" color="success" expand="block" shape="round"><ion-text color="light"> Finalizar</ion-text></ion-button>
                 </ion-col>
             </ion-row>
         </ion-list>

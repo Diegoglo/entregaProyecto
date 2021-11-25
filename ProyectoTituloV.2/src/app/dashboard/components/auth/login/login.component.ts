@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   url = environment.baseUrl;
   public checkoutForm: FormGroup;
   users: Auth[];
+  datosIncorrectos:boolean=false;
 
 
   constructor(
@@ -50,6 +51,8 @@ export class LoginComponent implements OnInit {
         await this.authService.login(this.checkoutForm.value).toPromise();
         this.router.navigateByUrl('dashboard/overview');
       } catch (error) {
+        this.datosIncorrectos=true;
+        
         console.log('Los datos ingresados son incorrectos');
       }
     }

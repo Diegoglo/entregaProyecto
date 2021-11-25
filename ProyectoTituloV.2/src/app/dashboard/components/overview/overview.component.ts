@@ -65,8 +65,6 @@ export class OverviewComponent implements OnInit{
     const pulseLength = this.pulseData.length;
     const gsrLength = this.gsrData.length;
 
-    console.log(`GSR : ${gsrLength}`);
-    console.log(`PULSO : ${pulseLength}`);
 
     //if(pulseLength!==0 && gsrLength!==0){
     //Aquí la función revisa los valores fuzzificados y analiza los que puedan tener índices de estrés

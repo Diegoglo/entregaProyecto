@@ -24,6 +24,7 @@ export class RegisterComponent implements OnInit {
   formulario: FormGroup;
   sexo: FormGroup;
   valorGenero: number;
+  registroIncorrecto:boolean = false;
 
   constructor( private form: FormBuilder, private userService: UserProviderService, private router:Router ) {
       this.sexo = this.form.group({
@@ -75,14 +76,20 @@ export class RegisterComponent implements OnInit {
   }
 
   public async submitUser(): Promise<void> {
-    const usuario = {
-      nombre:this.formulario.get('nombre').value,
-      apellido:this.formulario.get('apellido').value,
-      email:this.formulario.get('email').value,
-      sexo:this.genero(),
-      password:this.formulario.get('password').value,
-    };
-    await this.userService.addUser(usuario).toPromise();
+    try{
+      const usuario = {
+        nombre:this.formulario.get('nombre').value,
+        apellido:this.formulario.get('apellido').value,
+        email:this.formulario.get('email').value,
+        sexo:this.genero(),
+        password:this.formulario.get('password').value,
+      };
+      await this.userService.addUser(usuario).toPromise();
+      this.router.navigateByUrl('dashboard/login');
+    } catch(err){
+      this.registroIncorrecto=true;
+      console.log(err);
+    }
   }
 
 

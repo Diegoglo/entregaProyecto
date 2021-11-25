@@ -9,8 +9,8 @@
   <ion-list color="fondo">
       <ion-item-sliding> 
           <ion-item (click)="eliminarAuxiliante(index)" *ngFor="let auxiliante of auxiliantes; index as index">
-              <ion-label><h1>{{auxiliante.nombre}}</h1></ion-label>
-              <ion-label style="color: gray;">Presionar para eliminar</ion-label>
+              <ion-label><h1>{{auxiliante.nombre | titlecase}}</h1></ion-label>
+              <ion-label style="color: red;left:90%">Eliminar</ion-label>
           </ion-item>
       </ion-item-sliding> 
   </ion-list>

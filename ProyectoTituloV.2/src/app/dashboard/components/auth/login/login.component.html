@@ -26,6 +26,7 @@
             </ion-row>
             <ion-row class="ion-padding-vertical">
                 <ion-col className="ion-text-center">
+                    <span *ngIf="datosIncorrectos" style="color: red; padding-left: 10%;">Los datos ingresados son incorrectos</span>
                     <ion-button  routerLink="/dashboard/overview" color="success" expand="block" type="submit" shape="round"><ion-text color="light"> Iniciar Sesión</ion-text></ion-button>
                 </ion-col>
             </ion-row>

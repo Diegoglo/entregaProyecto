@@ -61,7 +61,7 @@ class AuxilianteController {
   }
 
   async update(id, changes) {
-    const auxiliante = await models.Auxiliante.findOne(id);
+    const auxiliante = await models.Auxiliante.findByPk(id);
     const rta = await auxiliante.update(changes);
     return rta
   }

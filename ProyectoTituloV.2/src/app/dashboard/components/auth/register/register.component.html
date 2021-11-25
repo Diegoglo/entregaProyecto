@@ -1,6 +1,6 @@
 <ion-header>
       <ion-toolbar color="fondo">
-          <ion-button slot="start" color="black" (click)="goToLogin()"><ion-icon name="arrow-back-outline" style="padding-left: 5%;"></ion-icon></ion-button>
+          <ion-button slot="start" (click)="goToLogin()"><ion-icon name="arrow-back-outline" style="padding-left: 5%;"></ion-icon></ion-button>
           <ion-title className="ion-text-center">Registro</ion-title>
       </ion-toolbar>
 </ion-header>
@@ -25,7 +25,7 @@
                     <ion-col className="ion-text-center">
                         <ion-item color="fondo">
                             <div *ngIf="formulario.get('apellido').errors && formulario.get('apellido').touched">
-                                <div *ngIf="formulario.get('apellido').hasError('required')" class="alert alert-danger" role="alert">
+                                <div *ngIf="formulario.get('apellido').hasError('required')">
                                     <small class="requerido">(Apellido obligatorio)</small>
                                 </div>
                             </div>
@@ -38,7 +38,7 @@
                     <ion-col className="ion-text-center">
                         <ion-item color="fondo">
                             <div *ngIf="formulario.get('email').errors && formulario.get('email').touched">
-                                <div *ngIf="formulario.get('email').hasError('required')" class="alert alert-danger" role="alert">
+                                <div *ngIf="formulario.get('email').hasError('required')">
                                     <small class="requerido">(Email requerido)</small>
                                 </div>
                             </div>
@@ -78,6 +78,7 @@
                               <div *ngIf="formulario.get('confirmarContraseña').hasError('required')">
                                   <small class="requerido">(Requiere confirmar contraseña)</small>
                               </div>
+                              <!-- <small *ngIf="formulario.get('confirmarContraseña').touched && !formulario.valid">Las contraseñas no coinciden</small> -->
                           </div>
                           <ion-label position="floating">Confirmar Contraseña</ion-label>
                           <ion-input type="password" formControlName="confirmarContraseña"></ion-input>
@@ -102,7 +103,8 @@
 
                 <ion-row class="ion-padding-vertical">
                     <ion-col className="ion-text-center">
-                        <ion-button type="submit" [disabled]="formulario.invalid" routerLink="/dashboard/login" color="success" expand="block" shape="round"><ion-text color="light"> Finalizar</ion-text></ion-button>
+                        <span *ngIf="registroIncorrecto" style="color: red;padding-left: 10%;"> No fue posible registrar el usuario</span>
+                        <ion-button type="submit" [disabled]="formulario.invalid" color="success" expand="block" shape="round"><ion-text color="light"> Finalizar</ion-text></ion-button>
                     </ion-col>
                 </ion-row>
             </ion-list>

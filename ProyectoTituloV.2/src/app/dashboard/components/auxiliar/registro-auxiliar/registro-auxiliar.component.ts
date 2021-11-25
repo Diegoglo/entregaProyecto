@@ -13,6 +13,7 @@ import { UserProviderService} from '../../../../core/providers/user/user-provide
 import { Storage } from '@capacitor/storage';
 
 import jwt_decode from 'jwt-decode';
+import { Router } from '@angular/router';
 const ACCESS_TOKEN_KEY = 'my-access-token';
 
 
@@ -23,11 +24,14 @@ const ACCESS_TOKEN_KEY = 'my-access-token';
 })
 export class RegistroAuxiliarComponent implements OnInit {
 
+
+  registroAuxIncorrecto:boolean=false;
   formAux: FormGroup;
   sexo: FormGroup;
   valorGenero: number;
 
   constructor(
+    private router:Router,
       private form: FormBuilder,
      private auxService: AuxilianteService,
      private userProvider: UserProviderService
@@ -44,21 +48,25 @@ export class RegistroAuxiliarComponent implements OnInit {
 
   public async registrarse(event: Event, formulario: FormGroupDirective ){
     event.preventDefault();
-    if (this.formAux.valid) {
-      const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
-      const decodeToken: any=jwt_decode(token.value);
-      const auxiliante={
-        user_id: decodeToken.sub,
-        nombre:this.formAux.get('nombre').value,
-        apellido:this.formAux.get('apellido').value,
-        email:this.formAux.get('email').value,
-        telefono:this.formAux.get('telefono').value,
-      };
-      console.log(auxiliante);
-      await this.auxService.addAuxiliante(auxiliante).toPromise();
-      await this.auxService.getAuxiliante(decodeToken.sub).toPromise();
-
-      // this.submitReport();
+    try{
+      if (this.formAux.valid) {
+        const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
+        const decodeToken: any=jwt_decode(token.value);
+        const auxiliante={
+          user_id: decodeToken.sub,
+          nombre:this.formAux.get('nombre').value,
+          apellido:this.formAux.get('apellido').value,
+          email:this.formAux.get('email').value,
+          telefono:this.formAux.get('telefono').value,
+        };
+        await this.auxService.addAuxiliante(auxiliante).toPromise();
+        await this.auxService.getAuxiliante(decodeToken.sub).toPromise();
+        this.router.navigateByUrl('dashboard/auxiliante');
+        // this.submitReport();
+      }
+    }catch(err){
+      this.registroAuxIncorrecto=true;
+      console.log(err)
     }
 
     formulario.resetForm(); // se resetea en esta parte, porque no se puede asignar como variable, porque la referencia no pasa al padre

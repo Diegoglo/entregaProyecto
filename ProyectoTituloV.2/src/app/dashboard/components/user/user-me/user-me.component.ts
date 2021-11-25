@@ -92,7 +92,6 @@ export class UserMeComponent implements OnInit {
     const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
     const decodeToken:any=jwt_decode(token.value);
     if (this.formPass.valid){
-      console.log(this.formPass.value);
       const usuario = {
         nombre:this.formulario.get('nombre').value,
         apellido:this.formulario.get('apellido').value,
@@ -100,9 +99,6 @@ export class UserMeComponent implements OnInit {
         sexo:this.genero(),
         password:this.formPass.get('password').value,
     };
-    console.log(this.formulario.value);
-    console.log(this.formulario.get('nombre').value);
-    console.log(usuario);
 
     await this.userService.updateUser(decodeToken.sub,usuario).toPromise();
     }else{
@@ -112,9 +108,6 @@ export class UserMeComponent implements OnInit {
         email:this.formulario.get('email').value,
         sexo:this.genero(),
     };
-    console.log(this.formulario.value);
-    console.log(this.formulario.get('nombre').value);
-    console.log(usuario);
 
     await this.userService.updateUser(decodeToken.sub,usuario).toPromise();
     }
