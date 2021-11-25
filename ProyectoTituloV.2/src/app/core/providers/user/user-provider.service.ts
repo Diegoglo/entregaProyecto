@@ -25,7 +25,7 @@ export class UserProviderService {
   }
 
   updateUser(id: string, user: User2): Observable<User2>{
-    return this.http.patch<User2>(`/users/${id}`, user);
+    return this.http.patch<User2>(`/users/${id}/personal-data`, user);
   }
 
   deleteUser(id: string): Observable<User2>{

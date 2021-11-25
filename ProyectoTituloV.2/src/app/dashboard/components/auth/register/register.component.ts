@@ -8,8 +8,10 @@ import {  AbstractControl,
           ValidatorFn,
           Validators } from '@angular/forms';
 import { UserProviderService } from '../../../../core/providers/user/user-provider.service';
-import { User2} from '../../../../core/model/user2.model';
-import { User } from 'src/app/core/model/user.model';
+import { Router } from '@angular/router';
+
+// import { User2} from '../../../../core/model/user2.model';
+// import { User } from 'src/app/core/model/user.model';
 
 
 @Component({
@@ -23,7 +25,7 @@ export class RegisterComponent implements OnInit {
   sexo: FormGroup;
   valorGenero: number;
 
-  constructor( private form: FormBuilder, private userService: UserProviderService ) {
+  constructor( private form: FormBuilder, private userService: UserProviderService, private router:Router ) {
       this.sexo = this.form.group({
         masculino: new FormControl(false),
         femenino: new FormControl(false)
@@ -66,13 +68,13 @@ export class RegisterComponent implements OnInit {
     if (this.formulario.valid) {
       // this.genero();
       // this.formulario.get('sexo').setValue(this.genero(), this.formulario);
-      this.submitReport();
+      this.submitUser();
     }
 
     //formulario.resetForm(); // se resetea en esta parte, porque no se puede asignar como variable, porque la referencia no pasa al padre
   }
 
-  public async submitReport(): Promise<void> {
+  public async submitUser(): Promise<void> {
     const usuario = {
       nombre:this.formulario.get('nombre').value,
       apellido:this.formulario.get('apellido').value,
@@ -103,6 +105,10 @@ export class RegisterComponent implements OnInit {
       return null;
     }
   };
+
+  goToLogin(){
+    this.router.navigateByUrl('dashboard/login');
+  }
 
 
 

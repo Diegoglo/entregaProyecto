@@ -11,6 +11,12 @@ import { StringDecoder } from 'string_decoder';
 import { UserProviderService } from '../../../../core/providers/user/user-provider.service';
 import { User2} from '../../../../core/model/user2.model';
 import { Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Storage } from '@capacitor/storage';
+
+import jwt_decode from 'jwt-decode'
+const ACCESS_TOKEN_KEY = 'my-access-token';
+
 
 
 @Component({
@@ -23,11 +29,15 @@ export class UserMeComponent implements OnInit {
   formulario: FormGroup;
   sexo: FormGroup;
   valorGenero: number;
+  id:string='';
+
+  
 
   constructor(
       private form: FormBuilder,
       private userService: UserProviderService,
-      private router: Router
+      private router: Router,
+      private route: ActivatedRoute,
       ) {
       this.sexo = this.form.group({
         masculino: new FormControl(false),
@@ -54,14 +64,6 @@ export class UserMeComponent implements OnInit {
     this.router.navigateByUrl('/dashboard/overview', {replaceUrl: true});
   }
 
-  public genero(): number{
-    if (this.sexo.get('femenino').value === true){
-      return this.valorGenero=1;
-    }else{
-      return this.valorGenero=0;
-    }
-  }
-
 
   onChange(){
 
@@ -74,21 +76,31 @@ export class UserMeComponent implements OnInit {
       this.genero();
       this.formulario.get('sexo').setValue(this.genero(), this.formulario);
       // console.log(this.formulario.get('sexo').value);
-      this.submitReport();
+      this.submitUser();
     }
 
     formulario.resetForm(); // se resetea en esta parte, porque no se puede asignar como variable, porque la referencia no pasa al padre
   }
 
-  public async submitReport(): Promise<void> {
-    const usuario: User2= {
+  public async submitUser(): Promise<void> {
+    const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
+    const decodeToken:any=jwt_decode(token.value);
+    const usuario = {
       nombre:this.formulario.get('nombre').value,
       apellido:this.formulario.get('apellido').value,
       email:this.formulario.get('email').value,
-      sexo:this.formulario.get('sexo').value,
+      sexo:this.genero(),
       password:this.formulario.get('password').value,
     };
-    await this.userService.addUser(usuario).toPromise();
+    await this.userService.updateUser(decodeToken.sub,usuario).toPromise();
+  }
+
+  public genero(): number{
+    if (this.sexo.get('femenino').value === true){
+      return 1;
+    }else{
+      return 0;
+    }
   }
 
 
@@ -112,10 +124,46 @@ export class UserMeComponent implements OnInit {
     }
   };
 
+  public async setUser(): Promise<void> {
+    // this.route.params.subscribe(async (params) => {
+      // this.id = params.id || '';
+      const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
+      const decodeToken:any=jwt_decode(token.value);
+      if (decodeToken.sub) {
+        try {
+          const data:any= await this.userService.getUser(decodeToken.sub).toPromise();
+          this.setFormSexo(data.sexo);
+
+          this.formulario.setValue({
+            nombre: data.nombre,
+            apellido: data.apellido,
+            email:data.email,
+            sexo:this.sexo,
+            password:null,
+            confirmarContraseña:null
+          });
+
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    // });
+  }
+
+  setFormSexo(sexo){
+    if (sexo===0){
+      this.sexo.get('masculino').setValue(true);  
+      this.sexo.get('femenino').setValue(false);
+    }else{
+      this.sexo.get('masculino').setValue(false);  
+      this.sexo.get('femenino').setValue(true);
+    }
+  }
+
 
 
   ngOnInit() {
-
+    this.setUser();
   }
 
 }
