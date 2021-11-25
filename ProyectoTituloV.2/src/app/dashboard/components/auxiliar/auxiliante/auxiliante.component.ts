@@ -1,7 +1,7 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { AuxService } from '../../../../core/providers/aux/aux.service'
+import { AuxilianteService } from '../../../../core/providers/auxiliante/auxiliante.service'
 import { Storage } from '@capacitor/storage';
 
 import jwt_decode from 'jwt-decode'
@@ -20,7 +20,7 @@ export class AuxilianteComponent implements OnInit, OnChanges {
   
 
   constructor(private router: Router,
-    private auxService: AuxService
+    private auxService: AuxilianteService
     ) { 
     interface IInvoice {
       invoiceDate: Date;
