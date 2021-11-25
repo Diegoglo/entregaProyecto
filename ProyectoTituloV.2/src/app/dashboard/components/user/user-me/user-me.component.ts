@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Storage } from '@capacitor/storage';
 
-import jwt_decode from 'jwt-decode'
+import jwt_decode from 'jwt-decode';
 const ACCESS_TOKEN_KEY = 'my-access-token';
 
 
@@ -34,7 +34,7 @@ export class UserMeComponent implements OnInit {
   valorGenero: number;
   id:string='';
 
-  
+
 
   constructor(
       private form: FormBuilder,
@@ -46,7 +46,7 @@ export class UserMeComponent implements OnInit {
         password: new FormControl('', [Validators.required, Validators.minLength(6)],),
         confirmarContraseña: new FormControl('', [Validators.required])
       },
-      {   
+      {
         validators: this.checkPasswords
       });
 
@@ -179,10 +179,10 @@ export class UserMeComponent implements OnInit {
 
   setFormSexo(sexo){
     if (sexo===0){
-      this.sexo.get('masculino').setValue(true);  
+      this.sexo.get('masculino').setValue(true);
       this.sexo.get('femenino').setValue(false);
     }else{
-      this.sexo.get('masculino').setValue(false);  
+      this.sexo.get('masculino').setValue(false);
       this.sexo.get('femenino').setValue(true);
     }
   }
