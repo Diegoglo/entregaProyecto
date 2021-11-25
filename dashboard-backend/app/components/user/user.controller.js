@@ -67,7 +67,7 @@ class UserController {
 
   async update(id, changes) {
     const user = await models.User.findOne(id);
-    const rta = await user.update(changes);
+    const rta = await user.update({...changes});
     return rta
   }
 

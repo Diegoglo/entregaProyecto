@@ -1,33 +1,24 @@
-import { AfterContentChecked, Component, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 // import { basename } from 'path';
 import io from 'socket.io-client';
 import fuzzylogic from 'fuzzylogic';
-
+import { Storage } from '@capacitor/storage';
 import { Utils } from 'tslint';
 import { timeStamp } from 'console';
-import { SwiperComponent } from 'swiper/angular';
-import { SwiperOptions} from 'swiper'
-import SwiperCore, {
-  Pagination
-} from 'swiper/core';
-SwiperCore.use([Pagination]);
+import { AuxilianteService } from '../../../core/providers/auxiliante/auxiliante.service';
+import { StressProviderService } from '../../../core/providers/stress/stress-provider.service';
+import jwt_decode from 'jwt-decode';
+
+const ACCESS_TOKEN_KEY = 'my-access-token';
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.scss'],
-  encapsulation:ViewEncapsulation.None
 })
-export class OverviewComponent implements OnInit, AfterContentChecked{
+export class OverviewComponent implements OnInit{
 
-  @ViewChild('swiper') swiper: SwiperComponent;
-
-  config: SwiperOptions={
-    slidesPerView:1,
-    spaceBetween:50,
-    pagination:true
-  };
 
   title = 'dashboard';
   public chartPulso: any = null;
@@ -45,7 +36,7 @@ export class OverviewComponent implements OnInit, AfterContentChecked{
   gsrLabel:any = [];
   pulseLabel:any=[];
 
-
+  emailDate: Date = null;
 
   transmitting: boolean = false;
 
@@ -56,16 +47,10 @@ export class OverviewComponent implements OnInit, AfterContentChecked{
   public SPN: any = []; //SpO2 Normal
   public status: string= 'No medido';
 
-  constructor() {
+  constructor(private auxilianteService: AuxilianteService, private stressProviderService: StressProviderService) {
 
   }
 
-  ngAfterContentChecked() {
-    if (this.swiper){
-      this.swiper.updateSwiper({});
-    }
-    
-  }
 
   public checkStress() {
 
@@ -136,16 +121,54 @@ export class OverviewComponent implements OnInit, AfterContentChecked{
     else if (promHHR > promMHR) {
 
       if (promGSR < 0.333) {
+        if(this.isValidDate(this.emailDate)){
+          this.emailDate = new Date();
+          this.sendMailtoContacts('Nivel de estrés alto');
+        }
         this.status = "Nivel de estrés alto";
       }
       else if (promGSR >= 0.333 && promGSR < 0.666) {
+        if(this.isValidDate(this.emailDate)){
+          this.emailDate = new Date();
+          this.sendMailtoContacts('Nivel de estrés alto');
+        }
         this.status = "Nivel de estrés alto";
       }
       else if (promGSR >= 0.666) {
+        if(this.isValidDate(this.emailDate)){
+          this.emailDate = new Date();
+          this.sendMailtoContacts('Nivel de estrés alto');
+        }
         this.status = "Nivel de estrés alto";
       }
     }
 
+  }
+
+  isValidDate(lastEmailSendedDate){
+    if(!lastEmailSendedDate) {
+      return true;
+    }
+    const currentDate = new Date();
+    const passedMinutes = ((currentDate.getTime() - lastEmailSendedDate.getTime()) / 1000) / 60;
+    if(passedMinutes > 5){
+      return true;
+    }else {
+      return false;
+    }
+  }
+
+  async sendMailtoContacts(nivelEstres: string){
+    const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
+    const decodeToken: any = jwt_decode(token.value);
+    const auxiliantes: any[] = await this.auxilianteService.getAuxiliante(decodeToken.sub).toPromise();
+    const emailAuxiliantes: any[]= auxiliantes.map(auxiliante => auxiliante.email);
+    const emailBody: any = {
+      subject: 'ALERTA DE ESTRES DASHBOARD PUCV',
+      message: nivelEstres,
+      emailContacto: emailAuxiliantes
+    };
+    this.stressProviderService.sendMail(emailBody);
   }
 
   ngOnInit() {
