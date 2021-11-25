@@ -10,6 +10,7 @@ export class StressProviderService {
   constructor(private http: HttpService) { }
 
   sendMail(emailBody): Observable<any>{
-    return this.http.post<any>('/users/register', emailBody);
+    console.log(emailBody);
+    return this.http.post<any>('/stress/mail', emailBody);
   }
 }

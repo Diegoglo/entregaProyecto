@@ -56,35 +56,38 @@
                     </ion-item>
                 </ion-col>
             </ion-row> -->
+            <ion-button (click)="cambiarContra()" expand ="block">click para cambiar contraseña</ion-button>
+            <div *ngIf="cambiarContrasena === true">
+                <form [formGroup]="formPass" #passForm="ngForm">
+                    <ion-row class="ion-padding">
+                        <ion-col className="ion-text-center">
+                            <ion-item>
+                                <div *ngIf="formPass.get('password').errors && formPass.get('password').touched">
+                                    <div *ngIf="formPass.get('password').hasError('required')">
+                                        <small class="requerido">(Contraseña obligatoria)</small>
+                                    </div>
+                                </div>
+                                <ion-label position="floating">Contraseña</ion-label>
+                                <ion-input  type="password" formControlName="password"></ion-input>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
 
-            <ion-row class="ion-padding">
-                <ion-col className="ion-text-center">
-                    <ion-item>
-                        <div *ngIf="formulario.get('password').errors && formulario.get('password').touched">
-                            <div *ngIf="formulario.get('password').hasError('required')">
-                                <small class="requerido">(Contraseña obligatoria)</small>
+                    <ion-row class="ion-padding">
+                    <ion-col className="ion-text-center">
+                        <ion-item>
+                            <div *ngIf="formPass.get('confirmarContraseña').errors && formPass.get('confirmarContraseña').touched">
+                                <div *ngIf="formPass.get('confirmarContraseña').hasError('required')">
+                                    <small class="requerido">(Requiere confirmar contraseña)</small>
+                                </div>
                             </div>
-                        </div>
-                        <ion-label position="floating">Contraseña</ion-label>
-                        <ion-input  type="password" formControlName="password"></ion-input>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-
-            <ion-row class="ion-padding">
-              <ion-col className="ion-text-center">
-                  <ion-item>
-                      <div *ngIf="formulario.get('confirmarContraseña').errors && formulario.get('confirmarContraseña').touched">
-                          <div *ngIf="formulario.get('confirmarContraseña').hasError('required')">
-                              <small class="requerido">(Requiere confirmar contraseña)</small>
-                          </div>
-                      </div>
-                      <ion-label position="floating">Confirmar Contraseña</ion-label>
-                      <ion-input type="password" formControlName="confirmarContraseña"></ion-input>
-                  </ion-item>
-              </ion-col>
-            </ion-row>
-
+                            <ion-label position="floating">Confirmar Contraseña</ion-label>
+                            <ion-input type="password" formControlName="confirmarContraseña"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                    </ion-row>
+                </form>
+            </div>
 
             <form [formGroup]="sexo" #sexForm="ngForm">
               <ion-row class="ion-padding">
@@ -102,7 +105,7 @@
 
             <ion-row class="ion-padding-vertical">
                 <ion-col className="ion-text-center">
-                    <ion-button (click)="submitUser()"type="submit" [disabled]="formulario.invalid" routerLink="/dashboard/login" color="success" expand="block" shape="round"><ion-text color="light"> Guardar</ion-text></ion-button>
+                    <ion-button type="submit" [disabled]="formulario.invalid" routerLink="/dashboard/overview" color="success" expand="block" shape="round"><ion-text color="light"> Guardar</ion-text></ion-button>
                 </ion-col>
             </ion-row>
         </ion-list>

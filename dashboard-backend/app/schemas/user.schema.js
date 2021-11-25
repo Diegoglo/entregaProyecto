@@ -18,10 +18,11 @@ const createUserSchema = Joi.object({
 })
 
 const updateUserSchema = Joi.object({
-  name: nombre,
+  nombre: nombre,
   apellido: apellido,
   email: email,
   password: password,
+  sexo:sexo,
   activo: activo
 })
 

@@ -1,4 +1,4 @@
-<ion-content>
+<!-- <ion-content>
   <div class="fluid-container" vh-100>
     <app-avatar></app-avatar>
     <ion-card>
@@ -17,11 +17,9 @@
       <ng-template swiperSlide>Slide 3</ng-template>
     </swiper>
   </div>
-</ion-content>
+</ion-content> -->
 
-<ion-button (click)="sendMailtoContacts()" color="danger" expand="block" shape="round"><ion-text color="dark">enviar email</ion-text></ion-button>
-
-<!-- <ion-content>
+<ion-content>
   <div class="fluid-container" vh-100>
     <app-avatar></app-avatar>
     <ion-card>
@@ -72,5 +70,7 @@
 
     <ion-button *ngIf="!transmitting" (click)="listenSignals()" color="secondary" expand="block" shape="round"><ion-text color="dark">Comenzar</ion-text></ion-button>
     <ion-button *ngIf="transmitting" (click)="stopSignals()" color="danger" expand="block" shape="round"><ion-text color="dark">Detener</ion-text></ion-button>
+    <ion-button (click)="sendMailtoContacts('perrito')" color="danger" expand="block" shape="round"><ion-text color="dark">enviar email</ion-text></ion-button>
+    
   </div>
-</ion-content> -->
+</ion-content>

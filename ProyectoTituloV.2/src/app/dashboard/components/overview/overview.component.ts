@@ -52,7 +52,7 @@ export class OverviewComponent implements OnInit{
   }
 
 
-  public checkStress() {
+   public checkStress() {
 
     let sumLHR = 0;
     let sumMHR = 0;
@@ -123,21 +123,21 @@ export class OverviewComponent implements OnInit{
       if (promGSR < 0.333) {
         if(this.isValidDate(this.emailDate)){
           this.emailDate = new Date();
-          this.sendMailtoContacts('Nivel de estrés alto');
+           this.sendMailtoContacts('Nivel de estrés alto');
         }
         this.status = "Nivel de estrés alto";
       }
       else if (promGSR >= 0.333 && promGSR < 0.666) {
         if(this.isValidDate(this.emailDate)){
           this.emailDate = new Date();
-          this.sendMailtoContacts('Nivel de estrés alto');
+           this.sendMailtoContacts('Nivel de estrés alto');
         }
         this.status = "Nivel de estrés alto";
       }
       else if (promGSR >= 0.666) {
         if(this.isValidDate(this.emailDate)){
           this.emailDate = new Date();
-          this.sendMailtoContacts('Nivel de estrés alto');
+           this.sendMailtoContacts('Nivel de estrés alto');
         }
         this.status = "Nivel de estrés alto";
       }
@@ -147,6 +147,7 @@ export class OverviewComponent implements OnInit{
 
   isValidDate(lastEmailSendedDate){
     if(!lastEmailSendedDate) {
+      console.log(lastEmailSendedDate);
       return true;
     }
     const currentDate = new Date();
@@ -158,10 +159,11 @@ export class OverviewComponent implements OnInit{
     }
   }
 
-  async sendMailtoContacts(nivelEstres: string){
+    async sendMailtoContacts(nivelEstres: string){
     const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
     const decodeToken: any = jwt_decode(token.value);
     const auxiliantes: any[] = await this.auxilianteService.getAuxiliante(decodeToken.sub).toPromise();
+    console.log(auxiliantes);
     const emailAuxiliantes: any[]= auxiliantes.map(auxiliante => auxiliante.email);
     const emailBody: any = {
       subject: 'ALERTA DE ESTRES DASHBOARD PUCV',

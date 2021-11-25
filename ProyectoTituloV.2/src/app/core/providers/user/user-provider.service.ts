@@ -23,8 +23,8 @@ export class UserProviderService {
     return this.http.post<User2>('/users/register', user);
   }
 
-  updateUser(id: string, user: User2): Observable<User2>{
-    return this.http.patch<User2>(`/users/${id}/personal-data`, user);
+  updateUser(id: string, user: any): Observable<User2>{
+    return this.http.patch<any>(`/users/${id}/personal-data`, user);
   }
 
   deleteUser(id: string): Observable<User2>{

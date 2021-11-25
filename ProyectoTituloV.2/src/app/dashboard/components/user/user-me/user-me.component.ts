@@ -27,6 +27,9 @@ const ACCESS_TOKEN_KEY = 'my-access-token';
 export class UserMeComponent implements OnInit {
 
   formulario: FormGroup;
+  formPass: FormGroup;
+  public cambiarContrasena:boolean=false;
+
   sexo: FormGroup;
   valorGenero: number;
   id:string='';
@@ -39,6 +42,14 @@ export class UserMeComponent implements OnInit {
       private router: Router,
       private route: ActivatedRoute,
       ) {
+      this.formPass= this.form.group({
+        password: new FormControl('', [Validators.required, Validators.minLength(6)],),
+        confirmarContraseña: new FormControl('', [Validators.required])
+      },
+      {   
+        validators: this.checkPasswords
+      });
+
       this.sexo = this.form.group({
         masculino: new FormControl(false),
         femenino: new FormControl(false)
@@ -52,12 +63,8 @@ export class UserMeComponent implements OnInit {
         apellido: new FormControl('', [Validators.required]),
         email: new FormControl('', [Validators.required, Validators.email]),
         sexo: null,
-        password: new FormControl('', [Validators.required, Validators.minLength(6)],),
-        confirmarContraseña: new FormControl('', [Validators.required])
-      },
-      {
-        validators: this.checkPasswords
-      });
+      }
+    );
   }
 
   goToOverview(){
@@ -72,27 +79,49 @@ export class UserMeComponent implements OnInit {
   public registrarse(event: Event, formulario: FormGroupDirective ){
     event.preventDefault();
     if (this.formulario.valid) {
-      // console.log(this.sexo.get('femenino').value);
-      this.genero();
-      this.formulario.get('sexo').setValue(this.genero(), this.formulario);
-      // console.log(this.formulario.get('sexo').value);
+      // this.genero();
+      // console.log(this.formulario.value)
+      // this.formulario.get('sexo').setValue(this.genero(), this.formulario);
       this.submitUser();
     }
 
-    formulario.resetForm(); // se resetea en esta parte, porque no se puede asignar como variable, porque la referencia no pasa al padre
+    // formulario.resetForm(); // se resetea en esta parte, porque no se puede asignar como variable, porque la referencia no pasa al padre
   }
 
   public async submitUser(): Promise<void> {
     const token = await Storage.get({ key: ACCESS_TOKEN_KEY });
     const decodeToken:any=jwt_decode(token.value);
-    const usuario = {
-      nombre:this.formulario.get('nombre').value,
-      apellido:this.formulario.get('apellido').value,
-      email:this.formulario.get('email').value,
-      sexo:this.genero(),
-      password:this.formulario.get('password').value,
+    if (this.formPass.valid){
+      console.log(this.formPass.value);
+      const usuario = {
+        nombre:this.formulario.get('nombre').value,
+        apellido:this.formulario.get('apellido').value,
+        email:this.formulario.get('email').value,
+        sexo:this.genero(),
+        password:this.formPass.get('password').value,
     };
+    console.log(this.formulario.value);
+    console.log(this.formulario.get('nombre').value);
+    console.log(usuario);
+
     await this.userService.updateUser(decodeToken.sub,usuario).toPromise();
+    }else{
+      const usuario = {
+        nombre:this.formulario.get('nombre').value,
+        apellido:this.formulario.get('apellido').value,
+        email:this.formulario.get('email').value,
+        sexo:this.genero(),
+    };
+    console.log(this.formulario.value);
+    console.log(this.formulario.get('nombre').value);
+    console.log(usuario);
+
+    await this.userService.updateUser(decodeToken.sub,usuario).toPromise();
+    }
+  }
+
+  public cambiarContra(){
+    this.cambiarContrasena=true;
   }
 
   public genero(): number{
@@ -139,8 +168,6 @@ export class UserMeComponent implements OnInit {
             apellido: data.apellido,
             email:data.email,
             sexo:this.sexo,
-            password:null,
-            confirmarContraseña:null
           });
 
         } catch (error) {

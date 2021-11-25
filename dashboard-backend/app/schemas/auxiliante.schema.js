@@ -16,7 +16,7 @@ const createAuxilianteSchema = Joi.object({
 })
 
 const updateAuxilianteSchema = Joi.object({
-  name: nombre,
+  nombre: nombre,
   apellido: apellido,
   email: email,
   telefono: telefono

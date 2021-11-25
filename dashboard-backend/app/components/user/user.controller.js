@@ -66,9 +66,20 @@ class UserController {
   }
 
   async update(id, changes) {
-    const user = await models.User.findOne(id);
-    const rta = await user.update({...changes});
-    return rta
+    const {password} = changes;
+    if (password){
+      const hash = auth.hashPassword(password);
+      const user = await models.User.findByPk(id);
+      const rta = await user.update({
+        ...changes, 
+        password:hash
+      });
+      return rta
+    }else{
+      const user = await models.User.findByPk(id);
+      const rta = await user.update({...changes});
+      return rta
+    }
   }
 
   async delete(id) {
