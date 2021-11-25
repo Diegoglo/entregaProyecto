@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterContentChecked, Component, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Chart } from 'chart.js';
 // import { basename } from 'path';
 import io from 'socket.io-client';
@@ -6,14 +6,28 @@ import fuzzylogic from 'fuzzylogic';
 
 import { Utils } from 'tslint';
 import { timeStamp } from 'console';
+import { SwiperComponent } from 'swiper/angular';
+import { SwiperOptions} from 'swiper'
+import SwiperCore, {
+  Pagination
+} from 'swiper/core';
+SwiperCore.use([Pagination]);
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.scss'],
+  encapsulation:ViewEncapsulation.None
 })
-export class OverviewComponent implements OnInit{
+export class OverviewComponent implements OnInit, AfterContentChecked{
 
+  @ViewChild('swiper') swiper: SwiperComponent;
+
+  config: SwiperOptions={
+    slidesPerView:1,
+    spaceBetween:50,
+    pagination:true
+  };
 
   title = 'dashboard';
   public chartPulso: any = null;
@@ -46,6 +60,12 @@ export class OverviewComponent implements OnInit{
 
   }
 
+  ngAfterContentChecked() {
+    if (this.swiper){
+      this.swiper.updateSwiper({});
+    }
+    
+  }
 
   public checkStress() {
 

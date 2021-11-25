@@ -80,14 +80,6 @@ export class RegisterComponent implements OnInit {
       sexo:this.genero(),
       password:this.formulario.get('password').value,
     };
-
-    // const usuario: User2= {
-    //   nombre:this.formulario.get('nombre').value,
-    //   apellido:this.formulario.get('apellido').value,
-    //   email:this.formulario.get('email').value,
-    //   sexo:this.formulario.get('sexo').value,
-    //   password:this.formulario.get('password').value,
-    // };
     await this.userService.addUser(usuario).toPromise();
   }
 
