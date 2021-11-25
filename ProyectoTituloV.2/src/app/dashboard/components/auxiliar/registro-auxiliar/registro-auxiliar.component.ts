@@ -8,7 +8,7 @@ import {  AbstractControl,
           ValidationErrors,
           ValidatorFn,
           Validators } from '@angular/forms';
-import { AuxService} from '../../../../core/providers/aux/aux.service'
+import { AuxilianteService} from '../../../../core/providers/auxiliante/auxiliante.service'
 import { UserProviderService} from '../../../../core/providers/user/user-provider.service'
 import { Storage } from '@capacitor/storage';
 
@@ -29,7 +29,7 @@ export class RegistroAuxiliarComponent implements OnInit {
 
   constructor(
       private form: FormBuilder,
-     private auxService: AuxService,
+     private auxService: AuxilianteService,
      private userProvider: UserProviderService
     ) {
     this.formAux = this.form.group({
